@@ -12,6 +12,7 @@ class GerritReview(object):
     def __init__(self):
         self.title = ''
         self.submitter = ''
+        self.project = ''
         self.reviews = []
         self.verifieds = []
         self.workflows = []
@@ -44,6 +45,7 @@ class GerritReview(object):
         review = cls()
         review._data = json_dict
         review.title = json_dict.get('subject')
+        review.project = json_dict.get('project')
         review.submitter = json_dict.get('owner').get('name')
         review.reviews = json_dict.get('labels').get('Code-Review').get('all')
         review.verifieds = json_dict.get('labels').get('Verified').get('all')
@@ -66,23 +68,6 @@ def get_changes(project_name):
     return json.loads(resp.content[4:])
 
 
-changes = get_changes('openstack/barbican')
-ready_for_merge = []
-one_plus_twos = []
-ready_for_review = []
-
-for change in changes:
-    review = GerritReview.from_dict(change)
-
-    if not review.has_negatives:
-        if review.plus_twos > 1:
-            ready_for_merge.append(review)
-        elif review.plus_twos == 1:
-            one_plus_twos.append(review)
-        elif review.plus_twos == 0:
-            ready_for_review.append(review)
-
-
 def get_message_data(plain_text=False):
     body = ''
 
@@ -95,11 +80,13 @@ def get_message_data(plain_text=False):
     def get_list_output(review_list):
         output = '\n' if plain_text else '<ul>\n'
         for review in review_list:
-            line = '    {title} ({href})\n'.format(
-                title=review.title, href=review.href)
+            short_proj = review.project.split('/')[1]
+            line = '    {project} | {title} ({href})\n'.format(
+                title=review.title, href=review.href, project=short_proj)
             if not plain_text:
-                line = '<li><a href="{href}">{title}</a></li>\n'.format(
-                    title=review.title, href=review.href)
+                line = ('<li><a href="{href}">{title}</a> | ({project})</li>'
+                        '\n').format(title=review.title, href=review.href,
+                                     project=short_proj)
 
             output += line
         output += '' if plain_text else '</ul>\n'
@@ -108,7 +95,7 @@ def get_message_data(plain_text=False):
     def get_newline():
         return '\n' if plain_text else '<br/>\n'
 
-    title = 'Generated CR Report for openstack/barbican - {date}'.format(
+    title = 'Generated CR Report - {date}\n'.format(
         date=datetime.date.today().strftime('%B %d %Y'))
 
     body += get_header(title, tag='h3')
@@ -144,6 +131,26 @@ parser.add_argument('key', help='Mailgun API Key')
 parser.add_argument('from_address', help='Email From Address')
 parser.add_argument('to_address', help='Email To Address')
 args = parser.parse_args()
+
+barbican_changes = get_changes('openstack/barbican')
+spec_changes = get_changes('openstack/barbican-specs')
+kite_changes = get_changes('stackforge/kite')
+changes = barbican_changes + spec_changes + kite_changes
+
+ready_for_merge = []
+one_plus_twos = []
+ready_for_review = []
+
+for change in changes:
+    review = GerritReview.from_dict(change)
+
+    if not review.has_negatives:
+        if review.plus_twos > 1:
+            ready_for_merge.append(review)
+        elif review.plus_twos == 1:
+            one_plus_twos.append(review)
+        elif review.plus_twos == 0:
+            ready_for_review.append(review)
 
 plain_text = get_message_data(plain_text=True)
 html = get_message_data()
