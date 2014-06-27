@@ -111,8 +111,9 @@ def get_message_data(plain_text=False):
     return body
 
 
-def send_message(domain, key, to_address, from_address, text, html):
-    subject = 'Barbican CR Report - {date}'.format(
+def send_message(domain, key, title, to_address, from_address, text, html):
+    subject = '{report_title} - {date}'.format(
+        report_title=title,
         date=datetime.date.today().strftime('%B %d %Y'))
     uri = 'https://api.mailgun.net/v2/{domain}/messages'.format(domain=domain)
 
@@ -130,12 +131,16 @@ parser.add_argument('domain', help='Mailgun Domain')
 parser.add_argument('key', help='Mailgun API Key')
 parser.add_argument('from_address', help='Email From Address')
 parser.add_argument('to_address', help='Email To Address')
+parser.add_argument('projects', nargs='+', type=str, default=[],
+                    help='List of gerrit project e.g. openstack/barbican')
+parser.add_argument('--report-title',
+                    help=('Manually specify the title for the email report'),
+                    default='CR Report')
 args = parser.parse_args()
 
-barbican_changes = get_changes('openstack/barbican')
-spec_changes = get_changes('openstack/barbican-specs')
-kite_changes = get_changes('stackforge/kite')
-changes = barbican_changes + spec_changes + kite_changes
+changes = []
+for project_name in args.projects:
+    changes += get_changes(project_name)
 
 ready_for_merge = []
 one_plus_twos = []
@@ -158,6 +163,7 @@ html = get_message_data()
 send_message(
     domain=args.domain,
     key=args.key,
+    title=args.report_title,
     to_address=args.to_address,
     from_address=args.from_address,
     text=plain_text,
