@@ -1,0 +1,25 @@
+#!/bin/bash
+
+pp_json()
+{
+	cmds=$@
+	$cmds | python -m json.tool | pygmentize -O full,style=monokai -l json
+}
+
+pretty_print_json_file()
+{
+	pp_json "cat $1"
+}
+
+pretty_print_json_str()
+{
+	pp_json "echo $@"
+}
+
+if [ -e "$1" ]
+then
+	pretty_print_json_file $1
+else
+	pretty_print_json_str $@
+fi
+
