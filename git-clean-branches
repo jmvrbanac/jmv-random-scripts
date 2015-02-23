@@ -1,0 +1,42 @@
+#!/usr/bin/python
+# Simple script to allow a user to interactively select branches for deletion
+# Author: John Vrbanac
+# License: Apache v2
+
+import subprocess
+import tempfile
+
+# Grab branch names
+output = subprocess.check_output(['git', 'branch'])
+full_branch_list = [branch.strip() for branch in output.splitlines()
+                    if branch != "* master"]
+
+# Create and open temporary file
+temp_file_obj = tempfile.NamedTemporaryFile()
+working_file = open(temp_file_obj.name, 'w+')
+working_file.write('# Uncomment the branch names you want to delete\n')
+working_file.write('# ---------------------------------------------\n')
+
+# Write out list of all branches commented out
+for branch in full_branch_list:
+    working_file.write('# {0}\n'.format(branch))
+working_file.flush()
+
+# Open up list for user to edit in vim
+print("Opening branch list in an editor...")
+subprocess.call(['vim', temp_file_obj.name])
+
+# Read in the user changes and add them to a list
+branches_to_delete = []
+working_file.seek(0)
+for item in working_file.readlines():
+    if not item.startswith('#'):
+        branches_to_delete.append(item)
+
+# Close file so the temp file goes away
+working_file.close()
+
+# Delete all the selected branches
+for branch_name in branches_to_delete:
+    cmd = ['git', 'branch', '-D', '{0}'.format(branch_name)]
+    subprocess.call(cmd)
