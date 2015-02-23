@@ -31,7 +31,7 @@ branches_to_delete = []
 working_file.seek(0)
 for item in working_file.readlines():
     if not item.startswith('#'):
-        branches_to_delete.append(item)
+        branches_to_delete.append(item.strip())
 
 # Close file so the temp file goes away
 working_file.close()
