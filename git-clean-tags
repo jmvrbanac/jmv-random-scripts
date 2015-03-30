@@ -1,0 +1,41 @@
+#!/usr/bin/python
+# Simple script to allow a user to interactively select tags for deletion
+# Author: John Vrbanac
+# License: Apache v2
+
+import subprocess
+import tempfile
+
+# Grab branch names
+output = subprocess.check_output(['git', 'tag'])
+full_tag_list = [tag.strip() for tag in output.splitlines()]
+
+# Create and open temporary file
+temp_file_obj = tempfile.NamedTemporaryFile()
+working_file = open(temp_file_obj.name, 'w+')
+working_file.write('# Uncomment the tag names you want to delete\n')
+working_file.write('# ---------------------------------------------\n')
+
+# Write out list of all branches commented out
+for tag in full_tag_list:
+    working_file.write('# {0}\n'.format(tag))
+working_file.flush()
+
+# Open up list for user to edit in vim
+print("Opening tag list in an editor...")
+subprocess.call(['vim', temp_file_obj.name])
+
+# Read in the user changes and add them to a list
+tags_to_delete = []
+working_file.seek(0)
+for item in working_file.readlines():
+    if not item.startswith('#'):
+        tags_to_delete.append(item.strip())
+
+# Close file so the temp file goes away
+working_file.close()
+
+# Delete all the selected branches
+for tag_name in tags_to_delete:
+    cmd = ['git', 'tag', '-d', '{0}'.format(tag_name)]
+    subprocess.call(cmd)
