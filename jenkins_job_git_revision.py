@@ -26,11 +26,11 @@ def get_build_sha1(url, tls_verify=True):
 
 parser = argparse.ArgumentParser()
 parser.add_argument('job_url', help='Jenkins job url')
-parser.add_argument('--no-tls-verify', action='store_true', dest='verify',
+parser.add_argument('--no-cert-verify', action='store_true', dest='no_verify',
                     help='Turns off TLS cert verification. Don\'t do this!')
 args = parser.parse_args()
 
 full_url = '{}/lastBuild/api/json'.format(args.job_url)
 
-sha1 = get_build_sha1(full_url, tls_verify=not args.verify)
+sha1 = get_build_sha1(full_url, tls_verify=not args.no_verify)
 print('Build Git Revision: {}'.format(sha1))
