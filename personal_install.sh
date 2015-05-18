@@ -37,7 +37,14 @@ sudo apt-get install -y ruby
 sudo pip install virtualenvwrapper -U
 
 # Corebird
-sudo apt-get install -y sqlite3 libglib2.0-dev libgtk-3-dev librest-dev valac-0.26 libgee-0.8-dev libjson-glib-dev libgstreamer1.0-dev libgstreamer-plugins-base1.0-dev
+sudo apt-get install -y sqlite3 libglib2.0-dev libgtk-3-dev librest-dev valac-0.26 libgee-0.8-dev libjson-glib-dev libgstreamer1.0-dev libgstreamer-plugins-base1.0-dev intltool
+
+# Powersaving
+sudo apt-get install -y laptop-mode-tools
+sudo su -c 'echo "options snd_hda_intel power_save=1" > /etc/modprobe.d/audio_powersave.conf'
+sudo su -c 'echo 5 > /proc/sys/vm/laptop_mode'
+sudo su -c 'echo "options usbcore autosuspend=1" > /etc/modprobe.d/usbcore'
+# sudo su -c 'echo "blacklist uhci_hcd" >> /etc/modprobe.d/blacklist'
 
 # - PyENV
 git clone https://github.com/yyuu/pyenv.git ~/.pyenv
