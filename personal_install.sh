@@ -1,5 +1,9 @@
 #!/bin/bash
 
+# Add i386 multi-arch support
+sudo dpkg --add-architecture i386
+sudo apt-get update
+
 # Editors
 sudo apt-get install -y vim vim-gnome
 
@@ -20,8 +24,14 @@ git clone https://github.com/gmarik/Vundle.vim.git ~/.vim/bundle/Vundle.vim
 mkdir -p ~/.vim/autoload ~/.vim/bundle && curl -LSso ~/.vim/autoload/pathogen.vim https://tpo.pe/pathogen.vim
 mkdir ~/.vim-tmp
 
+# VPN
+sudo apt-get install -y network-manager-openconnect-gnome
+
 # Internet Apps
 sudo apt-get install -y hexchat pithos
+
+# Other Apps
+sudo apt-get install -y shutter
 
 # Installing Docker
 sudo apt-key adv --keyserver hkp://p80.pool.sks-keyservers.net:80 --recv-keys 58118E89F3A912897C070ADBF76221572C52609D
@@ -30,7 +40,18 @@ sudo apt-get update
 sudo apt-get install -y docker-engine
 
 # Python Dev
-sudo apt-get install -y build-essential python-dev libffi-dev libssl-dev zlib1g-dev libbz2-dev libreadline-dev libsqlite3-dev llvm libncurses5-dev libncursesw5-dev
+sudo apt-get install -y build-essential python-dev libffi-dev libssl-dev zlib1g-dev \
+    libbz2-dev libreadline-dev libsqlite3-dev llvm libncurses5-dev libncursesw5-dev
+
+# Rust dev
+sudo apt-get install -y rustc cargo
+
+# For Postgres dev
+sudo apt-get install -y postgresql libpq-dev
+
+# For WebEx
+sudo apt-get install -y lib32stdc++6 libxmu6:i386 libgcj17-awt:i386 libpangoxft-1.0-0:i386 \
+    libxft2:i386 libpangoft2-1.0-0:i386 libpangox-1.0-0:i386 libxv1:i386
 
 # - Installing PyEnv
 git clone https://github.com/yyuu/pyenv.git ~/.pyenv
@@ -63,4 +84,5 @@ git clone git@github.com:jmvrbanac/dotfiles.git ~/Repositories/github/dotfiles
 ln -s ~/Repositories/github/dotfiles/.vimrc ~/.vimrc
 ln -s ~/Repositories/github/dotfiles/.tmux.conf ~/.tmux.conf
 ln -s ~/Repositories/github/dotfiles/.gitconfig ~/.gitconfig
+ln -s ~/Repositories/github/dotfiles/.bashrc_extra ~/.bashrc_extra
 ln -s ~/Repositories/github/dotfiles/.fonts.conf ~/.fonts.config
