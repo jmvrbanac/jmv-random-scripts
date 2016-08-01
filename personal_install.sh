@@ -53,6 +53,9 @@ sudo apt-get install -y postgresql libpq-dev
 sudo apt-get install -y lib32stdc++6 libxmu6:i386 libgcj17-awt:i386 libpangoxft-1.0-0:i386 \
     libxft2:i386 libpangoft2-1.0-0:i386 libpangox-1.0-0:i386 libxv1:i386
 
+# Laptop Only (Fix touchpad tap-to-click)
+sudo apt-get remove -y xserver-xorg-input-synaptics
+
 # - Installing PyEnv
 git clone https://github.com/yyuu/pyenv.git ~/.pyenv
 echo 'export PYENV_ROOT="$HOME/.pyenv"' >> ~/.bashrc
