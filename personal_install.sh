@@ -91,6 +91,7 @@ mkdir -p ~/Repositories/gitlab
 
 # Setup dotfiles
 git clone git@github.com:jmvrbanac/dotfiles.git ~/Repositories/github/dotfiles
+ln -s ~/Repositories/github/dotfiles/nvim-init.vim ~/.config/nvim/init.vim
 ln -s ~/Repositories/github/dotfiles/.vimrc ~/.vimrc
 ln -s ~/Repositories/github/dotfiles/.tmux.conf ~/.tmux.conf
 ln -s ~/Repositories/github/dotfiles/.gitconfig ~/.gitconfig
