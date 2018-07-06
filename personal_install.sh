@@ -95,6 +95,9 @@ sudo apt-get install -y rustc cargo
 # For Postgres dev
 sudo apt-get install -y postgresql libpq-dev
 
+# For Node dev
+curl -o- https://raw.githubusercontent.com/creationix/nvm/v0.33.11/install.sh | bash
+
 # Setup local bin
 echo 'export PATH="~/.local/bin/:$PATH"' >> ~/.bashrc
 
