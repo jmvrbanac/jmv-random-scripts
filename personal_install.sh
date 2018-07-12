@@ -77,13 +77,13 @@ echo 'export PATH="$PYENV_ROOT/bin:$PATH"' >> ~/.bashrc
 echo 'eval "$(pyenv init -)"' >> ~/.bashrc
 source ~/.bashrc
 
-pyenv install 2.7.14
+pyenv install 2.7.15
 pyenv install 3.4.7
 pyenv install 3.5.4
-pyenv install 3.6.3
+pyenv install 3.6.6
 pyenv install pypy2.7-5.9.0
 pyenv install pypy3.5-5.9.0
-pyenv global 3.6.3 2.7.14 pypy3.5-5.9.0 pypy2.7-5.9.0 3.5.4 3.4.7
+pyenv global 3.6.6 2.7.15 pypy3.5-5.9.0 pypy2.7-5.9.0 3.5.4 3.4.7
 
 git clone https://github.com/yyuu/pyenv-virtualenvwrapper.git ~/.pyenv/plugins/pyenv-virtualenvwrapper
 echo 'pyenv virtualenvwrapper' >> ~/.bashrc
@@ -100,6 +100,7 @@ curl -o- https://raw.githubusercontent.com/creationix/nvm/v0.33.11/install.sh | 
 nvm install stable
 
 # Setup local bin
+mkdir -p ~/.local/bin/kubectl
 echo 'export PATH="~/.local/bin/:$PATH"' >> ~/.bashrc
 
 # Ruby
