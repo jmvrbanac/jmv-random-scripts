@@ -65,6 +65,7 @@ ln -s ~/Repositories/github.com/jmvrbanac/dotfiles/.vimrc ~/.vimrc
 ln -s ~/Repositories/github.com/jmvrbanac/dotfiles/.gitconfig-work ~/.gitconfig-work
 ln -s ~/Repositories/github.com/jmvrbanac/dotfiles/.bashrc_extra ~/.bashrc_extra
 ln -s ~/Repositories/github.com/jmvrbanac/dotfiles/.fonts.conf ~/.fonts.config
+ln -s ~/Repositories/github.com/jmvrbanac/dotfiles/.pdbrc.py ~/.pdbrc.py
 
 # Python Dev
 sudo apt-get install -y build-essential python-dev libffi-dev libssl-dev zlib1g-dev \
