@@ -1,0 +1,16 @@
+#!/bin/bash
+
+HEADSET_MAC='CC:98:8B:7F:96:E2'
+function set_card() {
+    export BLUETOOTH_CARD=`pacmd list-cards | grep bluez_card -B1 | grep index | awk '{print $2}'`
+}
+
+set_card
+pacmd set-card-profile $BLUETOOTH_CARD off
+sleep 2
+echo -e "disconnect $HEADSET_MAC\n quit"|bluetoothctl
+sleep 5
+echo -e "connect $HEADSET_MAC\n quit"|bluetoothctl
+sleep 5
+set_card
+pacmd set-card-profile $BLUETOOTH_CARD a2dp_sink
